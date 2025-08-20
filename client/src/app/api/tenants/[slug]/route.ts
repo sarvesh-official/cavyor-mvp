@@ -1,13 +1,13 @@
-import { NextResponse } from 'next/server';
+import { NextResponse, NextRequest } from 'next/server';
 import { prisma } from '@/lib/prisma';
 
 // GET /api/tenants/[slug]
 export async function GET(
-  request: Request,
-  context: { params: { slug: string } }
+  request: NextRequest,
+  { params }: { params: { slug: string } }
 ) {
   try {
-    const { slug } = context.params;
+    const { slug } = params;
     
     const tenant = await prisma.tenant.findUnique({
       where: { slug }
