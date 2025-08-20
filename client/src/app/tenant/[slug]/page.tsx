@@ -21,8 +21,7 @@ export default function TenantDashboard() {
   useEffect(() => {
     async function fetchTenant() {
       try {
-        const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
-        const response = await fetch(`${apiUrl}/api/tenants/${slug}`, {
+        const response = await fetch(`/api/tenants/${slug}`, {
           credentials: 'include'
         })
         
@@ -82,7 +81,9 @@ export default function TenantDashboard() {
           <h1 className="text-2xl font-bold text-white mb-2">Tenant Not Found</h1>
           <p className="text-gray-300 mb-8">{error}</p>
           <a 
-            href="http://localhost:3001" 
+            href={typeof window !== 'undefined' && window.location.hostname.includes('localhost') 
+              ? 'http://localhost:3001' 
+              : '/'}
             className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl font-semibold hover:from-blue-700 hover:to-purple-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
           >
             <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -126,7 +127,9 @@ export default function TenantDashboard() {
                 {tenant.status}
               </span>
               <a 
-                href="http://localhost:3001" 
+                href={typeof window !== 'undefined' && window.location.hostname.includes('localhost') 
+                  ? 'http://localhost:3001' 
+                  : '/'}
                 className="px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg transition-all duration-200 font-medium border border-white/20 hover:border-white/30 backdrop-blur-sm"
               >
                 Create New
@@ -277,7 +280,9 @@ export default function TenantDashboard() {
               View Analytics
             </button>
             <a 
-              href="http://localhost:3001" 
+              href={typeof window !== 'undefined' && window.location.hostname.includes('localhost') 
+                ? 'http://localhost:3001' 
+                : '/'}
               className="px-6 py-3 bg-gradient-to-r from-emerald-600 to-emerald-700 text-white rounded-xl hover:from-emerald-700 hover:to-emerald-800 transition-all duration-200 font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 inline-flex items-center"
             >
               <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
