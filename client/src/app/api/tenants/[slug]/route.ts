@@ -4,9 +4,10 @@ import { prisma } from '@/lib/prisma';
 // GET /api/tenants/[slug]
 export async function GET(
   request: Request,
-  { params }: { params: { slug: string } }
+  context: { params: Promise<{ slug: string }> }
 ) {
   try {
+    const params = await context.params;
     const { slug } = params;
     
     const tenant = await prisma.tenant.findUnique({
