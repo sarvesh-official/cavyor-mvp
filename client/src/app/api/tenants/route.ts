@@ -1,6 +1,12 @@
 import { NextResponse } from 'next/server';
-import { slugify } from '@/utils/slugify';
-import { prisma } from '@/lib/prisma';
+import { PrismaClient } from '@prisma/client';
+import slugify from 'slugify';
+import { getTenantUrl, isDev } from '@/lib/utils';
+
+// Use PrismaClient as a singleton to avoid too many connections
+const globalForPrisma = global as unknown as { prisma: PrismaClient };
+export const prisma = globalForPrisma.prisma || new PrismaClient();
+if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma;
 
 // GET /api/tenants
 export async function GET() {
@@ -47,8 +53,8 @@ export async function POST(request: Request) {
       }
     });
     
-    // Generate URL hint for production
-    const urlHint = `${slug}.elmas.website`;
+    // Generate URL hint based on environment
+    const urlHint = getTenantUrl(slug).replace(/(https?:\/\/)/, '');
     
     return NextResponse.json({ tenant, urlHint }, { status: 201 });
   } catch (error) {

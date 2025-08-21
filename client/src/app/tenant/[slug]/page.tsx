@@ -1,7 +1,8 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { useParams } from 'next/navigation'
+import { notFound } from 'next/navigation';
+import { rootDomain } from '@/lib/utils';
 
 interface Tenant {
   id: string
@@ -11,9 +12,8 @@ interface Tenant {
   createdAt: string
 }
 
-export default function TenantDashboard() {
-  const params = useParams()
-  const slug = params.slug as string
+export default function TenantDashboard({ params }: { params: { slug: string } }) {
+  const { slug } = params;
   const [tenant, setTenant] = useState<Tenant | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -234,7 +234,7 @@ export default function TenantDashboard() {
               </div>
               <div>
                 <h4 className="font-semibold text-white text-lg mb-2">Custom Subdomain</h4>
-                <p className="text-gray-300">Access your workspace via {tenant.slug}.elmas.website with custom branding</p>
+                <p className="text-gray-300">Access your workspace via {tenant.slug}.{rootDomain} with custom branding</p>
               </div>
             </div>
             <div className="flex items-start space-x-4">

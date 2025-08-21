@@ -3,7 +3,8 @@
 import { useForm } from '@tanstack/react-form'
 import { useMutation } from '@tanstack/react-query'
 import { z } from 'zod'
-import { useState } from 'react'
+import { useState } from 'react';
+import { getTenantUrl } from '@/lib/utils';
 
 const tenantSchema = z.object({
   name: z.string()
@@ -280,9 +281,7 @@ export default function Home() {
                       Your tenant workspace is live and ready. Click below to visit your dashboard.
                     </p>
                     <a 
-                      href={typeof window !== 'undefined' && window.location.hostname.includes('localhost') 
-                        ? `http://${createdTenant.tenant.slug}.localhost:3001` 
-                        : `https://${createdTenant.tenant.slug}.elmas.website`}
+                      href={getTenantUrl(createdTenant.tenant.slug)}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-amber-500 to-orange-500 text-white rounded-lg hover:from-amber-600 hover:to-orange-600 transition-all duration-200 font-medium text-sm shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
