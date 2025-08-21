@@ -19,6 +19,7 @@ export function middleware(request: NextRequest) {
     subdomain !== 'www' && 
     subdomain !== 'localhost' && 
     subdomain !== 'cavyormvp' && 
+    subdomain !== 'elmas' && 
     !request.nextUrl.pathname.startsWith('/tenant/')
   ) {
     // Rewrite to the tenant-specific page

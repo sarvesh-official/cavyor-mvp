@@ -234,7 +234,7 @@ export default function TenantDashboard() {
               </div>
               <div>
                 <h4 className="font-semibold text-white text-lg mb-2">Custom Subdomain</h4>
-                <p className="text-gray-300">Access your workspace via {tenant.slug}.{typeof window !== 'undefined' && !window.location.hostname.includes('localhost') && !window.location.hostname.includes('vercel.app') ? window.location.hostname : 'cavyormvp.vercel.app'} with custom branding</p>
+                <p className="text-gray-300">Access your workspace via {tenant.slug}.elmas.website with custom branding</p>
               </div>
             </div>
             <div className="flex items-start space-x-4">

@@ -48,7 +48,7 @@ export async function POST(request: Request) {
     });
     
     // Generate URL hint for production
-    const urlHint = `${slug}.cavyormvp.vercel.app`;
+    const urlHint = `${slug}.elmas.website`;
     
     return NextResponse.json({ tenant, urlHint }, { status: 201 });
   } catch (error) {

@@ -282,9 +282,7 @@ export default function Home() {
                     <a 
                       href={typeof window !== 'undefined' && window.location.hostname.includes('localhost') 
                         ? `http://${createdTenant.tenant.slug}.localhost:3001` 
-                        : window.location.hostname.includes('vercel.app')
-                          ? `https://${createdTenant.tenant.slug}.cavyormvp.vercel.app`
-                          : `https://${createdTenant.tenant.slug}.${window.location.hostname}`}
+                        : `https://${createdTenant.tenant.slug}.elmas.website`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-amber-500 to-orange-500 text-white rounded-lg hover:from-amber-600 hover:to-orange-600 transition-all duration-200 font-medium text-sm shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
