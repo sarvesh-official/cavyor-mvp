@@ -32,9 +32,13 @@ export default function TenantDashboardClient({ tenant }: { tenant: Tenant }) {
                 {tenant.status}
               </span>
               <a 
-                href={typeof window !== 'undefined' && window.location.hostname.includes('localhost') 
-                  ? 'http://localhost:3001' 
-                  : '/'}
+                href="#"
+                onClick={(e) => {
+                  e.preventDefault();
+                  window.location.href = window.location.hostname.includes('localhost') 
+                    ? 'http://localhost:3001' 
+                    : '/';
+                }}
                 className="px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg transition-all duration-200 font-medium border border-white/20 hover:border-white/30 backdrop-blur-sm"
               >
                 Create New
@@ -109,7 +113,7 @@ export default function TenantDashboardClient({ tenant }: { tenant: Tenant }) {
               <div className="ml-4">
                 <h3 className="text-lg font-semibold text-white">Created</h3>
                 <p className="text-gray-300">
-                  {new Date(tenant.createdAt).toLocaleDateString()}
+                  {new Date(tenant.createdAt).toISOString().split('T')[0].replace(/-/g, '/')}
                 </p>
               </div>
             </div>
@@ -185,9 +189,13 @@ export default function TenantDashboardClient({ tenant }: { tenant: Tenant }) {
               View Analytics
             </button>
             <a 
-              href={typeof window !== 'undefined' && window.location.hostname.includes('localhost') 
-                ? 'http://localhost:3001' 
-                : '/'}
+              href="#"
+              onClick={(e) => {
+                e.preventDefault();
+                window.location.href = window.location.hostname.includes('localhost') 
+                  ? 'http://localhost:3001' 
+                  : '/';
+              }}
               className="px-6 py-3 bg-gradient-to-r from-emerald-600 to-emerald-700 text-white rounded-xl hover:from-emerald-700 hover:to-emerald-800 transition-all duration-200 font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 inline-flex items-center"
             >
               <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">

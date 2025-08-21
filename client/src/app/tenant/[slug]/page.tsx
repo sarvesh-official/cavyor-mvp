@@ -31,8 +31,13 @@ async function getTenant(slug: string): Promise<Tenant | null> {
   }
 }
 
-export default async function TenantDashboard({ params }: { params: { slug: string } }) {
-  const tenant = await getTenant(params.slug);
+type Props = {
+  params: Promise<{ slug: string }>
+}
+
+export default async function TenantDashboard({ params }: Props) {
+  const { slug } = await params;
+  const tenant = await getTenant(slug);
   
   if (!tenant) {
     notFound();
