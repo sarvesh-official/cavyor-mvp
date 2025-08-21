@@ -36,8 +36,8 @@ function extractSubdomain(request: NextRequest): string | null {
     return parts.length > 0 ? parts[0] : null;
   }
 
-  // Regular subdomain detection for custom domain (elmas.website)
-  const rootDomain = 'elmas.website';
+  // Regular subdomain detection for custom domain (cavyor.in)
+  const rootDomain = 'cavyor.in';
   const isSubdomain =
     hostname !== rootDomain &&
     hostname !== `www.${rootDomain}` &&

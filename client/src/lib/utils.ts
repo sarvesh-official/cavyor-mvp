@@ -1,6 +1,6 @@
 // Environment-aware configuration
 export const protocol = process.env.NODE_ENV === 'production' ? 'https' : 'http';
-export const rootDomain = process.env.NEXT_PUBLIC_ROOT_DOMAIN || 'elmas.website';
+export const rootDomain = process.env.NEXT_PUBLIC_ROOT_DOMAIN || 'cavyor.in';
 export const devDomain = 'localhost:3001';
 
 // Helper function to check if we're in a development environment
