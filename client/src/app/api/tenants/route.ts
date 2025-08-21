@@ -1,12 +1,7 @@
 import { NextResponse } from 'next/server';
-import { PrismaClient } from '@prisma/client';
 import slugify from 'slugify';
-import { getTenantUrl, isDev } from '@/lib/utils';
-
-// Use PrismaClient as a singleton to avoid too many connections
-const globalForPrisma = global as unknown as { prisma: PrismaClient };
-export const prisma = globalForPrisma.prisma || new PrismaClient();
-if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma;
+import { getTenantUrl } from '@/lib/utils';
+import { prisma } from '@/lib/prisma';
 
 // GET /api/tenants
 export async function GET() {
