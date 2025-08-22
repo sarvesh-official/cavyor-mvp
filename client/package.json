@@ -10,12 +10,15 @@
     "format": "biome format --write",
     "postinstall": "prisma generate",
     "db:push": "prisma db push",
-    "db:studio": "prisma studio"
+    "db:studio": "prisma studio",
+    "init-admin": "tsx scripts/init-admin.ts"
   },
   "dependencies": {
     "@prisma/client": "^5.22.0",
     "@tanstack/react-form": "^1.19.2",
     "@tanstack/react-query": "^5.17.0",
+    "@types/bcryptjs": "^2.4.6",
+    "bcryptjs": "^3.0.2",
     "cors": "^2.8.5",
     "next": "15.5.0",
     "react": "19.1.0",
@@ -32,6 +35,7 @@
     "@types/react-dom": "^19",
     "prisma": "^5.10.0",
     "tailwindcss": "^4",
+    "tsx": "^4.20.4",
     "typescript": "^5"
   }
 }

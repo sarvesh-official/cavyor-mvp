@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { isAuthenticated } from '@/lib/auth';
 
 /**
  * Extract subdomain from the request
@@ -11,15 +12,16 @@ function extractSubdomain(request: NextRequest): string | null {
 
   // Local development environment
   if (url.includes('localhost') || url.includes('127.0.0.1')) {
-    // Try to extract subdomain from the full URL
+    // Check if hostname contains a subdomain (e.g., tenant-name.localhost:3001)
+    if (hostname.includes('.localhost')) {
+      const subdomain = hostname.split('.')[0];
+      return subdomain;
+    }
+
+    // Fallback: try to extract subdomain from the full URL
     const fullUrlMatch = url.match(/http:\/\/([^.]+)\.localhost/);
     if (fullUrlMatch && fullUrlMatch[1]) {
       return fullUrlMatch[1];
-    }
-
-    // Fallback to host header approach
-    if (hostname.includes('.localhost')) {
-      return hostname.split('.')[0];
     }
 
     return null;
@@ -52,14 +54,33 @@ export function middleware(request: NextRequest) {
     return NextResponse.next();
   }
   
+  // Check authentication for admin routes (root path)
+  if (request.nextUrl.pathname === '/' || request.nextUrl.pathname.startsWith('/admin')) {
+    const subdomain = extractSubdomain(request);
+    
+    // Only apply auth check if we're not on a tenant subdomain
+    if (!subdomain) {
+      if (!isAuthenticated(request) && !request.nextUrl.pathname.startsWith('/login')) {
+        return NextResponse.redirect(new URL('/login', request.url));
+      }
+      
+      // Redirect from login to admin if already authenticated
+      if (isAuthenticated(request) && request.nextUrl.pathname.startsWith('/login')) {
+        return NextResponse.redirect(new URL('/', request.url));
+      }
+    }
+  }
+  
   const subdomain = extractSubdomain(request);
   
+  // Handle tenant subdomains - follow existing pattern
   if (
     subdomain && 
     !request.nextUrl.pathname.startsWith('/tenant/')
   ) {
     return NextResponse.rewrite(new URL(`/tenant/${subdomain}`, request.url));
   }
+  
   return NextResponse.next();
 }
 

@@ -2,10 +2,13 @@ import { NextResponse } from 'next/server';
 import slugify from 'slugify';
 import { getTenantUrl } from '@/lib/utils';
 import { prisma } from '@/lib/prisma';
+import { requireAdmin } from '@/lib/admin-auth';
 
-// GET /api/tenants
-export async function GET() {
+// GET /api/admin/tenants
+export async function GET(request: Request) {
   try {
+    requireAdmin(request);
+    
     const tenants = await prisma.tenant.findMany({
       orderBy: { createdAt: 'desc' }
     });
@@ -13,13 +16,18 @@ export async function GET() {
     return NextResponse.json({ tenants });
   } catch (error) {
     console.error('Error fetching tenants:', error);
+    if (error instanceof Error && error.message.includes('Unauthorized')) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
     return NextResponse.json({ error: 'Failed to fetch tenants' }, { status: 500 });
   }
 }
 
-// POST /api/tenants
+// POST /api/admin/tenants
 export async function POST(request: Request) {
   try {
+    requireAdmin(request);
+    
     const body = await request.json();
     const { name } = body;
     
@@ -59,6 +67,9 @@ export async function POST(request: Request) {
     return NextResponse.json({ tenant, urlHint }, { status: 201 });
   } catch (error) {
     console.error('Error creating tenant:', error);
+    if (error instanceof Error && error.message.includes('Unauthorized')) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
     return NextResponse.json({ error: 'Failed to create tenant' }, { status: 500 });
   }
 }
