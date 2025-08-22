@@ -1,11 +1,11 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import slugify from 'slugify';
 import { getTenantUrl } from '@/lib/utils';
 import { prisma } from '@/lib/prisma';
 import { requireAdmin } from '@/lib/admin-auth';
 
 // GET /api/admin/tenants
-export async function GET(request: Request) {
+export async function GET(request: NextRequest) {
   try {
     requireAdmin(request);
     
@@ -24,7 +24,7 @@ export async function GET(request: Request) {
 }
 
 // POST /api/admin/tenants
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   try {
     requireAdmin(request);
     

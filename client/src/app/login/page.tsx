@@ -173,9 +173,9 @@ export default function LoginPage() {
           </form>
 
           <div className="mt-6 text-center">
-            <p className="text-sm text-gray-400">
+            {/* <p className="text-sm text-gray-400">
               Default credentials: admin@cavyor.in / cavyorkapass
-            </p>
+            </p> */}
           </div>
         </div>
       </div>

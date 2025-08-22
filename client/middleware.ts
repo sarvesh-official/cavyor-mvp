@@ -49,34 +49,41 @@ function extractSubdomain(request: NextRequest): string | null {
 }
 
 export function middleware(request: NextRequest) {
-  // Skip for API routes
-  if (request.nextUrl.pathname.startsWith('/api')) {
-    return NextResponse.next();
+  const subdomain = extractSubdomain(request);
+  const pathname = request.nextUrl.pathname;
+  
+  // Debug logging
+  console.log('Middleware:', { pathname, subdomain, isAuth: isAuthenticated(request) });
+  
+  // Check authentication for admin API routes
+  if (pathname.startsWith('/api/admin/')) {
+    if (!isAuthenticated(request)) {
+      console.log('API route unauthorized, returning 401');
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
   }
   
-  // Check authentication for admin routes (root path)
-  if (request.nextUrl.pathname === '/' || request.nextUrl.pathname.startsWith('/admin')) {
-    const subdomain = extractSubdomain(request);
-    
+  // Check authentication for admin pages (root path)
+  if (pathname === '/' || pathname.startsWith('/admin')) {
     // Only apply auth check if we're not on a tenant subdomain
     if (!subdomain) {
-      if (!isAuthenticated(request) && !request.nextUrl.pathname.startsWith('/login')) {
+      if (!isAuthenticated(request) && !pathname.startsWith('/login')) {
+        console.log('Redirecting to login page');
         return NextResponse.redirect(new URL('/login', request.url));
       }
       
       // Redirect from login to admin if already authenticated
-      if (isAuthenticated(request) && request.nextUrl.pathname.startsWith('/login')) {
+      if (isAuthenticated(request) && pathname.startsWith('/login')) {
+        console.log('Redirecting from login to admin');
         return NextResponse.redirect(new URL('/', request.url));
       }
     }
   }
   
-  const subdomain = extractSubdomain(request);
-  
   // Handle tenant subdomains - follow existing pattern
   if (
     subdomain && 
-    !request.nextUrl.pathname.startsWith('/tenant/')
+    !pathname.startsWith('/tenant/')
   ) {
     return NextResponse.rewrite(new URL(`/tenant/${subdomain}`, request.url));
   }
@@ -88,11 +95,10 @@ export const config = {
   matcher: [
     /*
      * Match all paths except for:
-     * 1. /api routes
-     * 2. /_next (Next.js internals)
-     * 3. /static (e.g. favicon.ico)
-     * 4. all root files inside /public (e.g. /favicon.ico)
+     * 1. /_next (Next.js internals)
+     * 2. /static (e.g. favicon.ico)
+     * 3. all root files inside /public (e.g. /favicon.ico)
      */
-    '/((?!api|_next|static|[\\w-]+\\.\\w+).*)',
+    '/((?!_next|static|[\\w-]+\\.\\w+).*)',
   ],
 };
