@@ -63,18 +63,20 @@ export function middleware(request: NextRequest) {
     }
   }
   
-  // Check authentication for admin pages (root path)
-  if (pathname === '/' || pathname.startsWith('/admin')) {
-    // Only apply auth check if we're not on a tenant subdomain
-    if (!subdomain) {
-      if (!isAuthenticated(request) && !pathname.startsWith('/login')) {
-        console.log('Redirecting to login page');
+  // Check authentication for admin pages (root path and admin paths)
+  if (!subdomain) {
+    // If user is not authenticated and trying to access protected routes
+    if (!isAuthenticated(request)) {
+      // Allow access only to login page and public assets
+      if (pathname !== '/login' && !pathname.startsWith('/_next') && !pathname.startsWith('/api/auth')) {
+        console.log('Unauthorized access attempt, redirecting to login page');
         return NextResponse.redirect(new URL('/login', request.url));
       }
-      
-      // Redirect from login to admin if already authenticated
-      if (isAuthenticated(request) && pathname.startsWith('/login')) {
-        console.log('Redirecting from login to admin');
+    } else {
+      // User is authenticated
+      // Redirect from login to admin dashboard if already authenticated
+      if (pathname.startsWith('/login')) {
+        console.log('Authenticated user at login page, redirecting to admin dashboard');
         return NextResponse.redirect(new URL('/', request.url));
       }
     }
